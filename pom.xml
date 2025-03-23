@@ -12,7 +12,7 @@
 	<artifactId>ms-curso</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-curso</name>
-	<description>Microsserviço de curso, para mentoria de programa Trainee da SysMap.</description>
+	<description>Microsserviço para integração e distribuição de dados de cursos</description>
 	<url/>
 	<licenses>
 		<license/>
