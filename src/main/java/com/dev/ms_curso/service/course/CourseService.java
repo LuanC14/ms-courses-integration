@@ -50,7 +50,7 @@ public class CourseService {
 
         // Kafka Producer
         Course courseKafkaContract = Course.builder()
-                .id(createdCourse.getId())
+                .id(createdCourse.getId().toString())
                 .name(createdCourse.getName())
                 .description(createdCourse.getDescription())
                 .capacity(createdCourse.getCapacity())

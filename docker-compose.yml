@@ -26,13 +26,22 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: ms-curso-mssql-server
     environment:
-        ACCEPT_EULA: "Y"
-        SA_PASSWORD: "SuperPassword@23"
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "SuperPassword@23"
     ports:
       - "1433:1433"
     volumes:
       - mssql-data:/var/opt/mssql
     restart: always
+  mssqltools:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - mssql-server
+    volumes:
+      - ./integration/sql/01-create-course-table.sql:/tmp/01-create-course-table.sql
+      - ./integration/sql/init-database.sh:/tmp/init-database.sh
+    command: /bin/bash ./tmp/init-database.sh
+
 
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
@@ -101,8 +110,8 @@ services:
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components,/data/connect-jars
     volumes:
-      - $PWD/integration/data:/data
-      - .integration/kafka-connectors:/connectors
+      - ./integration/data:/data
+      - ./integration/kafka-connectors:/connectors
     command:
       - bash
       - -c
@@ -146,8 +155,8 @@ services:
       KSQL_KSQL_SERVICE_ID: confluent_rmoff_01
       KSQL_KSQL_HIDDEN_TOPICS: '^_.*'
     volumes:
-      - .integration/ksql:/docker-entrypoint-initdb.d/ksql
-      - .integration/execute-scripts.sh:/docker-entrypoint-initdb.d/execute-scripts.sh
+      - ./integration/ksql:/docker-entrypoint-initdb.d/ksql
+      - ./integration/execute-scripts.sh:/docker-entrypoint-initdb.d/execute-scripts.sh
     command: /bin/sh -c "/usr/bin/docker/run & ksql-datagen & sleep 120 && /docker-entrypoint-initdb.d/execute-scripts.sh & sleep infinity"
 
   control-center:
