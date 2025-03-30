@@ -1,15 +1,14 @@
 package com.dev.ms_curso.service.course;
 
-import com.dev.ms_curso.dto.CourseDto;
-import com.dev.ms_curso.dto.request.CreateCourseRequestDto;
-import com.dev.ms_curso.dto.request.UpdateCourseRequestDto;
-import com.dev.ms_curso.dto.response.CourseResponseDto;
-import com.dev.ms_curso.entity.database.CourseEntity;
+import com.dev.ms_curso.model.dto.CourseDto;
+import com.dev.ms_curso.model.request.CreateCourseRequestDto;
+import com.dev.ms_curso.model.request.UpdateCourseRequestDto;
+import com.dev.ms_curso.model.response.CourseResponseDto;
+import com.dev.ms_curso.model.entity.CourseEntity;
 import com.dev.ms_curso.exception.CourseNotFoundException;
-import com.dev.ms_curso.kafka.contracts.CourseAvro;
 import com.dev.ms_curso.repository.CourseRepository;
-import com.dev.ms_curso.service.kafka.KafkaService;
-import com.dev.ms_curso.service.redis.RedisService;
+import com.dev.ms_curso.service.cache.CourseCacheService;
+import com.dev.ms_curso.service.event.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,10 @@ public class CourseService {
     private CourseRepository repository;
 
     @Autowired
-    private RedisService redisService;
+    CourseCacheService courseCacheService;
 
     @Autowired
-    private KafkaService kafkaService;
+    private EventService eventService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -45,46 +44,36 @@ public class CourseService {
 
         CourseEntity createdCourse = repository.saveAndFlush(courseEntity);
 
-        // Redis
-        redisService.deleteByKey("courses-list");
+        // Cache
+        courseCacheService.deleteCoursesList();
 
-        // Kafka Producer
-        CourseAvro courseAvro = CourseAvro.newBuilder()
-                .setId(createdCourse.getId().toString())
-                .setName(createdCourse.getName())
-                .setDescription(createdCourse.getDescription())
-                .setCapacity(createdCourse.getCapacity())
-                .setIntegrated(true)
-                .build();
-
-        kafkaService.sendMessage(courseAvro);
+        // Event
+        eventService.sendEvent(modelMapper.map(createdCourse, CourseDto.class));
     }
 
     public CourseResponseDto getCourseById(UUID id) {
 
-        Optional<List<CourseDto>> optionalCache = redisService.getCoursesByKey(id.toString());
+        Optional<CourseDto> optionalCache = courseCacheService.getCourseById(id);
 
         if (optionalCache.isPresent()) {
-            CourseDto cachedCourse = optionalCache.get().get(0);
+            CourseDto cachedCourse = optionalCache.get();
             return modelMapper.map(cachedCourse, CourseResponseDto.class);
         }
 
         CourseEntity courseEntity = repository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Curso não encontrado"));
 
-        redisService.saveCourses(id.toString(), List.of(modelMapper.map(courseEntity, CourseDto.class)));
+        courseCacheService.saveCourse(id.toString(), modelMapper.map(courseEntity, CourseDto.class));
 
         return modelMapper.map(courseEntity, CourseResponseDto.class);
     }
 
     public List<CourseResponseDto> getAllCourses() {
 
-        Optional<List<CourseDto>> optionalCache = redisService.getCoursesByKey("courses-list");
+        List<CourseDto> cacheCourseList = courseCacheService.getCoursesList();
 
-        if (optionalCache.isPresent()) {
-            List<CourseDto> cachedCourse = optionalCache.get();
-
-            return cachedCourse.stream()
+        if (!cacheCourseList.isEmpty()) {
+            return cacheCourseList.stream()
                     .map(course -> modelMapper.map(course, CourseResponseDto.class))
                     .toList();
         }
@@ -99,7 +88,7 @@ public class CourseService {
                 .map(entity -> modelMapper.map(entity, CourseDto.class))
                 .toList();
 
-        redisService.saveCourses("courses-list", coursesDto);
+        courseCacheService.saveCourseList(coursesDto);
 
         return courseEntities.stream().map(entity -> modelMapper.map(entity, CourseResponseDto.class)).toList();
     }
@@ -115,8 +104,8 @@ public class CourseService {
 
         repository.save(courseEntity);
 
-        redisService.deleteByKey(courseEntity.getId().toString());
-        redisService.deleteByKey("courses-list");
+        courseCacheService.deleteCourseById(courseEntity.getId());
+        courseCacheService.deleteCoursesList();
 
         return modelMapper.map(courseEntity, CourseResponseDto.class);
     }
@@ -128,7 +117,7 @@ public class CourseService {
 
         repository.delete(courseEntity);
 
-        redisService.deleteByKey(courseEntity.getId().toString());
-        redisService.deleteByKey("courses-list");
+        courseCacheService.deleteCourseById(courseEntity.getId());
+        courseCacheService.deleteCoursesList();
     }
 }

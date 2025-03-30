@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "CourseAvro",
-  "namespace": "com.dev.ms_curso.kafka.contracts",
+  "namespace": "com.dev.ms_curso.infrastructure.kafka",
   "fields": [
     { "name": "id", "type": "string" },
     { "name": "description", "type": "string" },

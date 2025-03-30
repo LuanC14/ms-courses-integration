@@ -1,6 +1,6 @@
 package com.dev.ms_curso.exception;
 
-import com.dev.ms_curso.dto.response.ErrorResponseDto;
+import com.dev.ms_curso.model.response.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

@@ -1,6 +1,6 @@
-package com.dev.ms_curso.entity.cache;
+package com.dev.ms_curso.infrastructure.redis;
 
-import com.dev.ms_curso.dto.CourseDto;
+import com.dev.ms_curso.model.dto.CourseDto;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;

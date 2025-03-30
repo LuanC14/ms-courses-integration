@@ -1,4 +1,4 @@
-package com.dev.ms_curso.dto;
+package com.dev.ms_curso.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,9 +1,9 @@
 package com.dev.ms_curso.controller;
 
-import com.dev.ms_curso.dto.request.CreateCourseRequestDto;
-import com.dev.ms_curso.dto.request.UpdateCourseRequestDto;
-import com.dev.ms_curso.dto.response.ErrorResponseDto;
-import com.dev.ms_curso.dto.response.CourseResponseDto;
+import com.dev.ms_curso.model.request.CreateCourseRequestDto;
+import com.dev.ms_curso.model.request.UpdateCourseRequestDto;
+import com.dev.ms_curso.model.response.ErrorResponseDto;
+import com.dev.ms_curso.model.response.CourseResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

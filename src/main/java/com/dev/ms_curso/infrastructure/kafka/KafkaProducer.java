@@ -1,12 +1,11 @@
-package com.dev.ms_curso.service.kafka;
+package com.dev.ms_curso.infrastructure.kafka;
 
-import com.dev.ms_curso.kafka.contracts.CourseAvro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class KafkaService {
+@Component
+public class KafkaProducer {
 
     private static final String TP_CREATED_COURSES = "TP-CREATED-COURSES-AVRO";
     private static final String TP_INTEGRATED_COURSES = "TP-INTEGRATED-COURSES";

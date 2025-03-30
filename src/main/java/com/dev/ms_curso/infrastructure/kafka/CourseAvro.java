@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package com.dev.ms_curso.kafka.contracts;
+package com.dev.ms_curso.infrastructure.kafka;
 
 import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -658055464622062182L;
+  private static final long serialVersionUID = 7429910676460061246L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CourseAvro\",\"namespace\":\"com.dev.ms_curso.kafka.contracts\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"description\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"capacity\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"integrated\",\"type\":[\"null\",\"boolean\"],\"default\":null}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CourseAvro\",\"namespace\":\"com.dev.ms_curso.infrastructure.kafka\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"description\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"capacity\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"integrated\",\"type\":[\"null\",\"boolean\"],\"default\":null}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -218,8 +218,8 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
    * Creates a new CourseAvro RecordBuilder.
    * @return A new CourseAvro RecordBuilder
    */
-  public static com.dev.ms_curso.kafka.contracts.CourseAvro.Builder newBuilder() {
-    return new com.dev.ms_curso.kafka.contracts.CourseAvro.Builder();
+  public static com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder newBuilder() {
+    return new com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder();
   }
 
   /**
@@ -227,11 +227,11 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
    * @param other The existing builder to copy.
    * @return A new CourseAvro RecordBuilder
    */
-  public static com.dev.ms_curso.kafka.contracts.CourseAvro.Builder newBuilder(com.dev.ms_curso.kafka.contracts.CourseAvro.Builder other) {
+  public static com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder newBuilder(com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder other) {
     if (other == null) {
-      return new com.dev.ms_curso.kafka.contracts.CourseAvro.Builder();
+      return new com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder();
     } else {
-      return new com.dev.ms_curso.kafka.contracts.CourseAvro.Builder(other);
+      return new com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder(other);
     }
   }
 
@@ -240,11 +240,11 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
    * @param other The existing instance to copy.
    * @return A new CourseAvro RecordBuilder
    */
-  public static com.dev.ms_curso.kafka.contracts.CourseAvro.Builder newBuilder(com.dev.ms_curso.kafka.contracts.CourseAvro other) {
+  public static com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder newBuilder(com.dev.ms_curso.infrastructure.kafka.CourseAvro other) {
     if (other == null) {
-      return new com.dev.ms_curso.kafka.contracts.CourseAvro.Builder();
+      return new com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder();
     } else {
-      return new com.dev.ms_curso.kafka.contracts.CourseAvro.Builder(other);
+      return new com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder(other);
     }
   }
 
@@ -270,7 +270,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.dev.ms_curso.kafka.contracts.CourseAvro.Builder other) {
+    private Builder(com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -298,7 +298,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
      * Creates a Builder by copying an existing CourseAvro instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.dev.ms_curso.kafka.contracts.CourseAvro other) {
+    private Builder(com.dev.ms_curso.infrastructure.kafka.CourseAvro other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -336,7 +336,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder setId(java.lang.String value) {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder setId(java.lang.String value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -356,7 +356,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'id' field.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder clearId() {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder clearId() {
       id = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -376,7 +376,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'description'.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder setDescription(java.lang.String value) {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder setDescription(java.lang.String value) {
       validate(fields()[1], value);
       this.description = value;
       fieldSetFlags()[1] = true;
@@ -396,7 +396,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'description' field.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder clearDescription() {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder clearDescription() {
       description = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -416,7 +416,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'name'.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder setName(java.lang.String value) {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder setName(java.lang.String value) {
       validate(fields()[2], value);
       this.name = value;
       fieldSetFlags()[2] = true;
@@ -436,7 +436,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'name' field.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder clearName() {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder clearName() {
       name = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -456,7 +456,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'capacity'.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder setCapacity(java.lang.Integer value) {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder setCapacity(java.lang.Integer value) {
       validate(fields()[3], value);
       this.capacity = value;
       fieldSetFlags()[3] = true;
@@ -476,7 +476,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'capacity' field.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder clearCapacity() {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder clearCapacity() {
       capacity = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -496,7 +496,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'integrated'.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder setIntegrated(java.lang.Boolean value) {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder setIntegrated(java.lang.Boolean value) {
       validate(fields()[4], value);
       this.integrated = value;
       fieldSetFlags()[4] = true;
@@ -516,7 +516,7 @@ public class CourseAvro extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'integrated' field.
       * @return This builder.
       */
-    public com.dev.ms_curso.kafka.contracts.CourseAvro.Builder clearIntegrated() {
+    public com.dev.ms_curso.infrastructure.kafka.CourseAvro.Builder clearIntegrated() {
       integrated = null;
       fieldSetFlags()[4] = false;
       return this;

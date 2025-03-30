@@ -1,4 +1,4 @@
-package com.dev.ms_curso.dto.response;
+package com.dev.ms_curso.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

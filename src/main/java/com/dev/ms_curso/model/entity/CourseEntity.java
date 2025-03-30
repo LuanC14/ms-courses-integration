@@ -1,4 +1,4 @@
-package com.dev.ms_curso.entity.database;
+package com.dev.ms_curso.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

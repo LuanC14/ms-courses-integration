@@ -1,9 +1,9 @@
 package com.dev.ms_curso.controller;
 
-import com.dev.ms_curso.dto.request.CreateCourseRequestDto;
-import com.dev.ms_curso.dto.request.UpdateCourseRequestDto;
+import com.dev.ms_curso.model.request.CreateCourseRequestDto;
+import com.dev.ms_curso.model.request.UpdateCourseRequestDto;
 import com.dev.ms_curso.service.course.CourseService;
-import com.dev.ms_curso.dto.response.CourseResponseDto;
+import com.dev.ms_curso.model.response.CourseResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
