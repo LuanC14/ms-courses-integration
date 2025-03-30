@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "CourseAvro",
+  "namespace": "com.dev.ms_curso.kafka.contracts",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "name", "type": "string" },
+    { "name": "capacity", "type": ["null", "int"], "default": null },
+    { "name": "integrated", "type": ["null", "boolean"], "default": null }
+  ]
+}
