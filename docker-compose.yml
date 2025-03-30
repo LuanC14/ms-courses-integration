@@ -21,18 +21,20 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ms-curso-network
 
-  mssql-server:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: ms-curso-mssql-server
+  oracle:
+    image: container-registry.oracle.com/database/free:latest
+    container_name: oracledb
     environment:
-        ACCEPT_EULA: "Y"
-        SA_PASSWORD: "SuperPassword@23"
+      ORACLE_PWD: 12345678
     ports:
-      - "1433:1433"
+      - "1521:1521"
     volumes:
-      - mssql-data:/var/opt/mssql
-    restart: always
+      - "oracle_data:/opt/oracle/oradata"
+    networks:
+      - ms-curso-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
@@ -40,6 +42,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - ms-curso-network
 
   broker:
     image: confluentinc/cp-kafka:6.2.0
@@ -59,7 +63,8 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
-      KAFKA_CREATE_TOPICS: "TP-CREATED-COURSES:1:1"
+    networks:
+      - ms-curso-network
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.2.0
@@ -71,6 +76,8 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:29092
+    networks:
+      - ms-curso-network
 
   kafka-connect:
     image: confluentinc/cp-kafka-connect-base:6.2.0
@@ -79,7 +86,7 @@ services:
       - broker
       - schema-registry
       - postgres
-      - mssql-server
+      - oracle
     ports:
       - 8083:8083
     environment:
@@ -101,15 +108,14 @@ services:
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components,/data/connect-jars
     volumes:
-      - $PWD/integration/data:/data
-      - .integration/kafka-connectors:/connectors
+      - ./integration/data:/data
+      - ./integration/kafka-connectors:/connectors
     command:
       - bash
       - -c
       - |
         echo "Installing Connectors"
         confluent-hub install --no-prompt debezium/debezium-connector-postgresql:2.2.1
-        confluent-hub install --no-prompt debezium/debezium-connector-sqlserver:2.2.1
         confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:10.7.3
         echo "Listing connectors directory"
         ls -l /connectors
@@ -118,14 +124,13 @@ services:
         sleep 30
         curl -X POST \
           -H "Content-Type: application/json" \
-          --data @/connectors/source-mssql.json \
-          http://localhost:8083/connectors &
-        sleep 30
-        curl -X POST \
-          -H "Content-Type: application/json" \
-          --data @/connectors/sink-course.json \
+          --data @/connectors/sink-oracle-curso-connector.json \
           http://localhost:8083/connectors &
         sleep infinity
+
+    networks:
+      - ms-curso-network
+
   ksqldb:
     image: confluentinc/ksqldb-server:0.21.0
     container_name: ms-curso-ksqldb
@@ -146,9 +151,11 @@ services:
       KSQL_KSQL_SERVICE_ID: confluent_rmoff_01
       KSQL_KSQL_HIDDEN_TOPICS: '^_.*'
     volumes:
-      - .integration/ksql:/docker-entrypoint-initdb.d/ksql
-      - .integration/execute-scripts.sh:/docker-entrypoint-initdb.d/execute-scripts.sh
-    command: /bin/sh -c "/usr/bin/docker/run & ksql-datagen & sleep 120 && /docker-entrypoint-initdb.d/execute-scripts.sh & sleep infinity"
+      - ./integration/ksql/queries:/docker-entrypoint-initdb.d/ksql
+      - ./integration/ksql/shell/execute-queries.sh:/docker-entrypoint-initdb.d/execute-queries.sh
+    command: /bin/sh -c "/usr/bin/docker/run & ksql-datagen & sleep 120 && /docker-entrypoint-initdb.d/execute-queries.sh & sleep infinity"
+    networks:
+      - ms-curso-network
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:6.2.0
@@ -181,8 +188,13 @@ services:
               necessary topics to be available"
         sleep 120  
         /etc/confluent/docker/run
+    networks:
+      - ms-curso-network
 
 volumes:
   postgres_data:
-  mssql-data:
-    driver: local
+  oracle_data:
+
+networks:
+  ms-curso-network:
+    driver: bridge

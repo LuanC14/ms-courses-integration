@@ -1,12 +1,12 @@
 package com.dev.ms_curso.service.course;
 
 import com.dev.ms_curso.dto.CourseDto;
-import com.dev.ms_curso.dto.kafka.Course;
 import com.dev.ms_curso.dto.request.CreateCourseRequestDto;
 import com.dev.ms_curso.dto.request.UpdateCourseRequestDto;
 import com.dev.ms_curso.dto.response.CourseResponseDto;
 import com.dev.ms_curso.entity.database.CourseEntity;
 import com.dev.ms_curso.exception.CourseNotFoundException;
+import com.dev.ms_curso.kafka.contracts.CourseAvro;
 import com.dev.ms_curso.repository.CourseRepository;
 import com.dev.ms_curso.service.kafka.KafkaService;
 import com.dev.ms_curso.service.redis.RedisService;
@@ -49,15 +49,15 @@ public class CourseService {
         redisService.deleteByKey("courses-list");
 
         // Kafka Producer
-        Course courseKafkaContract = Course.builder()
-                .id(createdCourse.getId())
-                .name(createdCourse.getName())
-                .description(createdCourse.getDescription())
-                .capacity(createdCourse.getCapacity())
-                .integrated(false)
+        CourseAvro courseAvro = CourseAvro.newBuilder()
+                .setId(createdCourse.getId().toString())
+                .setName(createdCourse.getName())
+                .setDescription(createdCourse.getDescription())
+                .setCapacity(createdCourse.getCapacity())
+                .setIntegrated(true)
                 .build();
 
-        kafkaService.sendMessage(courseKafkaContract);
+        kafkaService.sendMessage(courseAvro);
     }
 
     public CourseResponseDto getCourseById(UUID id) {
